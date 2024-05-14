@@ -1,0 +1,104 @@
+int redLed1 = 5;
+int greenLed1 = 6;
+
+int redLed2 = 7;
+int greenLed2 = 8;
+
+const int trigSonic1 = 9;
+const int echoSonic1 = 10;
+
+const int trigSonic2 = 11;
+const int echoSonic2 = 12;
+
+void setup(){
+
+  pinMode(redLed1, OUTPUT);
+  pinMode(greenLed1, OUTPUT);
+  pinMode(redLed2, OUTPUT);
+  pinMode(greenLed2, OUTPUT);
+
+}
+
+void loop(){
+
+  int distance1, distance2;
+
+  distance1 = calculatedistance(trigSonic1, echoSonic1);
+  distance2 = calculatedistance(trigSonic2, echoSonic2);
+
+  if(distance1 >= distance2){
+
+    digitalWrite(redLed1, LOW);
+    digitalWrite(greenLed1, LOW);
+    digitalWrite(redLed2, LOW);
+    digitalWrite(greenLed2, LOW);
+
+    delay(200);
+
+    while(distance1>distance2){
+
+      distance1 = calculatedistance(trigSonic1, echoSonic1);
+      distance2 = calculatedistance(trigSonic2, echoSonic2);
+
+      digitalWrite(redLed1, HIGH);
+      digitalWrite(greenLed1, LOW);
+      digitalWrite(redLed2, LOW);
+      digitalWrite(greenLed2, HIGH);
+    }
+  }
+
+  if(distance2 >= distance1){
+
+    digitalWrite(redLed1, LOW);
+    digitalWrite(greenLed1, LOW);
+    digitalWrite(redLed2, LOW);
+    digitalWrite(greenLed2, LOW);
+    
+    delay(200);
+
+    while(distance2 > distance1){
+
+      distance1 = calculatedistance(trigSonic1, echoSonic1);
+      distance2 = calculatedistance(trigSonic2, echoSonic2);
+
+      digitalWrite(redLed1, LOW);
+      digitalWrite(greenLed1, HIGH);
+      digitalWrite(redLed2, HIGH);
+      digitalWrite(greenLed2,LOW);
+
+
+    }
+
+  }
+}
+
+  long microsecondsToCentimeters(long microseconds){
+
+   return microseconds / 29 / 2;
+
+  }
+
+  int calculatedistance(int tricSonic1, int echoSonic1){
+
+    long duration, inches, cm, meter;
+
+    pinMode(trigSonic1, OUTPUT);
+
+    digitalWrite(trigSonic1, LOW);
+    delayMicroseconds(2);
+
+    digitalWrite(trigSonic1, HIGH);
+    delayMicroseconds(10);
+
+    digitalWrite(trigSonic1, LOW);
+
+    pinMode(echoSonic1, INPUT);
+
+    duration = pulseIn(echoSonic1, HIGH);
+
+    cm = microsecondsToCentimeters(duration);
+
+    meter = cm*100;
+
+    return meter;
+  }
